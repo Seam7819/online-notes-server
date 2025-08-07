@@ -50,6 +50,21 @@ async function run() {
             res.send(result)
         })
 
+        app.put('/notes/:id',async (req,res)=>{
+            const id = req.params.id;
+            const note = req.body;
+            const filter = {_id : new ObjectId(id)}
+            const updateInfo = {
+                $set :{
+                    text : note.text,
+                    date : note.date
+
+                }
+            }
+            const result = await notesCollection.updateOne(filter,updateInfo)
+            res.send(result)
+        })
+
         app.delete('/notes/:id',async(req,res)=>{
             const id = req.params.id;
             console.log(id);
@@ -57,6 +72,7 @@ async function run() {
             const result = await notesCollection.deleteOne(query)
             res.send(result)
         })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
